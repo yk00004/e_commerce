@@ -1,0 +1,68 @@
+<mat-card
+  class="example-card w-70 cursor-pointer flex flex-col justify-between h-[32rem] overflow-hidden"
+  appearance="outlined"
+  [routerLink]="'/product/' + item._id"
+>
+  <div>
+    <mat-card-header>
+      <mat-card-title class="truncate">{{ item.name }}</mat-card-title>
+      <mat-card-subtitle class="line-clamp-2">{{ item.shortDescription }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <div class="flex items-center justify-center h-56 w-full overflow-hidden px-2">
+      <img
+        mat-card-image
+        [src]="item.Images[0]"
+        alt="Photo"
+        class="object-contain max-h-full max-w-full"
+      />
+    </div>
+
+    <mat-card-content class="px-4 py-2">
+      <p class="text-sm line-clamp-3">
+        {{ item.Description }}
+      </p>
+    </mat-card-content>
+  </div>
+<mat-card-actions class="px-4 pb-4 flex flex-col gap-2">
+  <!-- Price Display -->
+  <div class="text-base sm:text-lg font-semibold text-gray-800 flex items-center gap-2">
+    <span *ngIf="item?.discount" class="line-through text-sm text-gray-400">
+      ₹{{ item?.Price }}
+    </span>
+    <span class="text-green-600 text-lg font-bold">
+      ₹{{
+        item?.discount
+          ?roundPrice(item.Price,item.discount)
+          : item.Price
+      }}
+    </span>
+    <span *ngIf="item?.discount" class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
+      -{{ item.discount }}%
+    </span>
+  </div>
+
+
+
+
+
+
+<button  mat-icon-button color="warn" (click)="addtocart(item)">
+  @if(isincart(item)){
+    <mat-icon>remove_shopping_cart</mat-icon>
+  }@else{
+    <mat-icon>add_shopping_cart</mat-icon>
+  }
+</button>
+<button  mat-icon-button color="warn" (click)="addtowishlist(item)">
+  @if(isinwishlist(item)){
+    <mat-icon>favorite</mat-icon>
+  }@else{
+    <mat-icon>favorite_border</mat-icon>
+  }
+</button>
+
+
+</mat-card-actions>
+
+</mat-card>

@@ -1,0 +1,82 @@
+<div class="max-w-5xl mx-auto p-6 bg-gray-50 min-h-screen">
+  <h2 class="text-3xl font-extrabold mb-8 text-center text-indigo-700">My Orders</h2>
+
+  <div *ngIf="!orderlist || orderlist.length === 0" class="text-center text-gray-500 italic text-lg">
+    No orders found.
+  </div>
+
+  <div *ngFor="let order of orderlist" class="bg-white shadow-md rounded-lg p-6 mb-8 border border-gray-200">
+    <!-- Order Header -->
+    <div class="flex justify-between items-center mb-4 border-b pb-2">
+      <div class="text-sm text-gray-500">
+        <span class="font-semibold">🆔 Order ID:</span> {{ order._id }}
+      </div>
+      <div class="text-sm text-gray-500">
+        <span class="font-semibold">Date:</span> {{ order.date | date:'medium' }}
+      </div>
+      <div>
+        <span
+          class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase"
+          [ngClass]="{
+            'bg-green-100 text-green-800': order.Status === 'Delivered',
+            'bg-yellow-100 text-yellow-800': order.Status === 'Pending',
+            'bg-red-100 text-red-800': order.Status === 'Cancelled',
+            'bg-gray-100 text-gray-600': !order.Status
+          }"
+        >
+          {{ order.Status || 'Pending' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Payment and Total -->
+    <div class="mb-4 flex justify-between text-gray-700 font-medium">
+      <div>Payment Mode: <span class="font-normal">{{ order.paymentmode }}</span></div>
+      <div>Total Amount: <span class="font-normal text-indigo-600">₹{{ order.totalamount }}</span></div>
+    </div>
+
+    <!-- Shipping Address -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold mb-1">Shipping Address</h3>
+      <p class="text-gray-600 leading-relaxed">
+        {{ order.address.fullName }}<br />
+        {{ order.address.address }}, {{ order.address.city }} - {{ order.address.zip }}<br />
+        {{ order.address.state }}<br />
+        📞 {{ order.address.phone }}
+      </p>
+    </div>
+
+    <!-- Items List -->
+    <div>
+      <h3 class="text-lg font-semibold mb-3">Ordered Items</h3>
+      <ul class="divide-y divide-gray-200">
+        <li
+          *ngFor="let item of order.items"
+          class="py-3 flex items-center space-x-4"
+          
+        >
+          <!-- Thumbnail (optional if you have image URL) -->
+          <img
+
+            [src]="item.productId.Images[0]"
+            alt="{{ item.productId.name }}"
+            class="w-16 h-16 rounded object-cover border border-gray-300"
+          />
+          <div class="flex-1 min-w-0">
+            <p class="text-md font-semibold text-gray-900">
+              {{ item.productId?.name || 'Unnamed Product' }}
+            </p>
+            <p class="text-sm text-gray-500">
+              Quantity: {{ item.quantity }} &nbsp;|&nbsp;
+              Price: ₹{{ item.productId?.Price }} &nbsp;|&nbsp;
+              Subtotal: ₹{{ item.quantity * item.productId?.Price }}
+            </p>
+            <p *ngIf="item.productId?.description" class="text-sm text-gray-400 mt-1">
+              {{ item.productId.description }}
+            </p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

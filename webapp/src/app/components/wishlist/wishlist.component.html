@@ -1,0 +1,14 @@
+<div class="p-6">
+  <h2 class="text-2xl font-semibold mb-4">My Wishlist</h2>
+
+  <div *ngIf="whishlist.length === 0" class="text-gray-500">
+    Your wishlist is empty.
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" *ngIf="whishlist.length > 0">
+    <app-product-card
+      *ngFor="let item of whishlist"
+      [item]="item.productId">
+    </app-product-card>
+  </div>
+</div>

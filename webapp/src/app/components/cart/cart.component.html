@@ -1,0 +1,245 @@
+@if(orderstep==0){
+<div class="max-w-6xl mx-auto p-6">
+  <h1 class="text-4xl font-extrabold mb-8 text-gray-900">Shopping Cart</h1>
+
+  <div class="flex flex-col md:flex-row md:space-x-12">
+    <!-- Left side: Cart Items list -->
+    <div class="flex-1 space-y-6">
+      <mat-card
+        *ngFor="let item of cartitems"
+        class="p-4 shadow-lg rounded-lg hover:shadow-2xl transition-shadow"
+      >
+        <div
+          class="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6"
+        >
+          <!-- Image Left -->
+          <img
+            [src]="item.productId.Images[0]"
+            alt="{{ item.productId.name }}"
+            class="w-28 h-28 object-cover rounded-lg border border-gray-200 flex-shrink-0"
+          />
+
+          <!-- Details Right -->
+          <div class="flex-1 flex flex-col">
+            <!-- Name & Description -->
+            <div>
+              <h2 class="text-2xl font-semibold text-gray-800">
+                {{ item.productId.name }}
+              </h2>
+              <p class="text-gray-500 mt-1">{{ item.productId.Description }}</p>
+            </div>
+
+            <!-- Quantity and Price -->
+            <div
+              class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0"
+            >
+              <!-- Quantity Controls -->
+              <div class="flex items-center space-x-4">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  aria-label="Decrease quantity"
+                  class="border border-gray-300 rounded-md hover:bg-gray-100"
+                  (click)="decquntity(item)"
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+
+                <span class="text-xl font-medium text-gray-800 w-8 text-center">
+                  {{ item.quantity }}
+                </span>
+
+                <button
+                  mat-icon-button
+                  color="primary"
+                  aria-label="Increase quantity"
+                  class="border border-gray-300 rounded-md hover:bg-gray-100"
+                  (click)="incresquntity(item)"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+
+                <!-- price  -->
+                <div
+                  class="text-base sm:text-lg font-semibold text-gray-800 flex items-center gap-2"
+                >
+                  <span
+                    *ngIf="item.productId.discount"
+                    class="line-through text-sm text-gray-400"
+                  >
+                    ₹{{ item.productId.Price }}
+                  </span>
+                  <span class="text-green-600 text-lg font-bold">
+                    ₹{{
+                      item.productId.discount
+                        ? roundPrice(
+                            item.productId.Price,
+                            item.productId.discount
+                          )
+                        : item.productId.Price
+                    }}
+                  </span>
+                  <span
+                    *ngIf="item.productId.discount"
+                    class="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded"
+                  >
+                    -{{ item.productId.discount }}%
+                  </span>
+                </div>
+              </div>
+
+              <!-- Price -->
+              <span class="text-xl font-semibold text-gray-900">
+                ₹{{
+                  roundPrice(item.productId.Price, item.productId.discount) *
+                    item.quantity
+                }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Remove Button -->
+          <button
+            (click)="removeItem(item.productId)"
+            mat-icon-button
+            color="warn"
+            aria-label="Remove item"
+            class="self-start sm:self-center"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Right side: Cart Summary -->
+    <div
+      class="w-full md:w-96 mt-8 md:mt-0 p-6 border border-gray-300 rounded-lg shadow-lg flex flex-col justify-between"
+    >
+      <div *ngFor="let item of cartitems" class="mb-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-gray-800 font-medium">{{ item.productId.name }}</p>
+            <p class="text-sm text-gray-500">Qty: {{ item.quantity }}</p>
+          </div>
+          <p class="text-gray-800 font-semibold">
+            ₹{{
+              roundPrice(item.productId.Price, item.productId.discount) *
+                item.quantity
+            }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <hr class="my-4 border-gray-300" />
+
+      <!-- Grand Total -->
+      <div class="flex justify-between text-lg font-bold">
+        <span>Total:</span>
+        <span>₹{{ getTotal() }}</span>
+      </div>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="w-full py-4 text-lg font-semibold"
+        (click)="getaddresspage_0()"
+      >
+        Checkout
+      </button>
+    </div>
+  </div>
+</div>
+} @else if(orderstep==1){
+<div class="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-2xl">
+  <h2 class="text-2xl font-bold mb-6 text-center">Shipping Address</h2>
+
+  <form class="space-y-4" [formGroup]="addressform" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-full" appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" formControlName="fullName" />
+      <mat-error *ngIf="addressform.get('fullName')?.hasError('required')">
+        Name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-full" appearance="fill">
+      <mat-label>Phone</mat-label>
+      <input matInput type="text" formControlName="phone" />
+      <mat-error *ngIf="addressform.get('phone')?.hasError('required')">
+        Phone is required
+      </mat-error>
+      <mat-error *ngIf="addressform.get('phone')?.hasError('pattern')">
+        Invalid phone number
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-full" appearance="fill">
+      <mat-label>Address</mat-label>
+      <textarea matInput rows="3" formControlName="address"></textarea>
+      <mat-error *ngIf="addressform.get('address')?.hasError('required')">
+        Address is required
+      </mat-error>
+    </mat-form-field>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <mat-form-field class="w-full" appearance="fill">
+        <mat-label>City</mat-label>
+        <input matInput type="text" formControlName="city" />
+        <mat-error *ngIf="addressform.get('city')?.hasError('required')">
+          City is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="fill">
+        <mat-label>State</mat-label>
+        <input matInput type="text" formControlName="state" />
+        <mat-error *ngIf="addressform.get('state')?.hasError('required')">
+          State is required
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field class="w-full" appearance="fill">
+      <mat-label>ZIP Code</mat-label>
+      <input matInput type="text" formControlName="zip" />
+      <mat-error *ngIf="addressform.get('zip')?.hasError('required')">
+        ZIP is required
+      </mat-error>
+      <mat-error *ngIf="addressform.get('zip')?.hasError('pattern')">
+        Invalid ZIP code
+      </mat-error>
+    </mat-form-field>
+
+    <div class="text-center pt-4">
+      <button mat-raised-button color="primary" type="submit" [disabled]="addressform.invalid" class="px-6 py-2">
+        Continue to Payment
+      </button>
+    </div>
+  </form>
+</div>
+}@else if(orderstep==2){
+  <div class="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-2xl">
+  <h2 class="text-2xl font-bold mb-6 text-center">Select Payment Method</h2>
+
+  <div class="flex flex-col gap-4">
+    <div
+      (click)="onSelect('Card')"
+      class="cursor-pointer border rounded-xl p-4 hover:shadow-md transition duration-200 flex items-center gap-3"
+    >
+      <mat-icon color="primary">credit_card</mat-icon>
+      <span class="text-lg font-medium">Pay via Card</span>
+    </div>
+
+    <div
+      (click)="onSelect('COD')"
+      class="cursor-pointer border rounded-xl p-4 hover:shadow-md transition duration-200 flex items-center gap-3"
+    >
+      <mat-icon color="primary">payments</mat-icon>
+      <span class="text-lg font-medium">Cash on Delivery (COD)</span>
+    </div>
+  </div>
+</div>
+
+}

@@ -1,0 +1,108 @@
+<header class="bg-white shadow-sm">
+  <!-- Top bar with logo, search, profile and store -->
+  <div
+    class="flex items-center justify-between gap-6 px-6 py-6 border-b border-gray-200"
+  >
+    <!-- Logo -->
+    <div
+      class="text-2xl font-bold text-indigo-600 cursor-pointer"
+      routerLink="/"
+    >
+      ShopEase
+    </div>
+
+    <!-- Search bar -->
+    <!-- Search bar -->
+    <div
+      class="flex items-center w-1/2 max-w-xl bg-gray-100 rounded-lg px-4 py-2 shadow-inner"
+    >
+      <mat-icon class="text-gray-500 mr-2">search</mat-icon>
+      <input
+        [(ngModel)]="searchvalyu"
+        (keyup.enter)="onsearch($event)"
+        type="text"
+        placeholder="Search for products..."
+        class="w-full bg-transparent outline-none text-sm"
+      />
+    </div>
+
+    <!-- Profile & Auth Section -->
+    <div class="flex items-center gap-4">
+      <!-- Role-based Username -->
+      <ng-container *ngIf="Authservice.isadmin; else userBlock">
+        <a routerLink="/admin" class="text-blue-600 font-semibold">{{
+          Authservice.username
+        }}</a>
+      </ng-container>
+      <ng-template #userBlock>
+        <a routerLink="/profile" class="text-blue-600 font-semibold">{{
+          Authservice.username
+        }}</a>
+        <ng-container *ngIf="Authservice.islogedin">
+          <button
+            mat-button
+            routerLink="/order"
+            class="flex items-center gap-2"
+          >
+            <mat-icon>assignment</mat-icon>
+            <span>Orders</span>
+          </button>
+        </ng-container>
+      </ng-template>
+
+      <!-- Auth Buttons -->
+      <ng-container *ngIf="Authservice.islogedin; else guestBlock">
+        <a (click)="logout()" class="cursor-pointer text-red-500 font-medium"
+          >Log Out</a
+        >
+      </ng-container>
+      <ng-template #guestBlock>
+        <a routerLink="/login" class="cursor-pointer text-green-600 font-medium"
+          >Log In</a
+        >
+        <a
+          routerLink="/register"
+          class="cursor-pointer text-green-600 font-medium"
+          >Register</a
+        >
+      </ng-template>
+    </div>
+
+    <!-- Wishlist & Cart -->
+    <div class="flex items-center gap-3">
+      <button
+        routerLink="/wishlist"
+        mat-button
+        color="primary"
+        class="flex items-center gap-2"
+      >
+        <mat-icon>favorite</mat-icon>
+        <span>Wishlist</span>
+      </button>
+      <button
+        routerLink="/cart"
+        mat-button
+        color="primary"
+        class="flex items-center gap-2"
+      >
+        <mat-icon>shopping_cart</mat-icon>
+        <span>Cart</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Category Bar -->
+  <ng-container *ngIf="Authservice.islogedin">
+    <nav
+      class="flex gap-6 px-6 py-2 bg-indigo-50 text-indigo-700 font-medium text-sm overflow-x-auto whitespace-nowrap"
+    >
+      <a
+        *ngFor="let item of categorylist; index as i"
+        (click)="searchcategory(item._id)"
+        class="hover:text-indigo-900 cursor-pointer"
+      >
+        {{ item.name }}
+      </a>
+    </nav>
+  </ng-container>
+</header>

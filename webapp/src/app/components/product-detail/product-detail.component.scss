@@ -1,0 +1,21 @@
+.cart-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #1976d2 !important;
+  color: white !important;
+  border-radius: 6px;
+  padding: 8px 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  text-transform: none;
+}
+
+.cart-btn mat-icon {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+.cart-btn span {
+  font-weight: 500;
+  font-size: 14px;
+}
