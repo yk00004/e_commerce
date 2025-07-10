@@ -2,9 +2,9 @@
 <div class="max-w-6xl mx-auto p-6">
   <h1 class="text-4xl font-extrabold mb-8 text-gray-900">Shopping Cart</h1>
 
-  <div class="flex flex-col md:flex-row md:space-x-12">
+  <div class="flex flex-col md:flex-row md:space-x-12"  >
     <!-- Left side: Cart Items list -->
-    <div class="flex-1 space-y-6">
+    <div class="flex-1 space-y-6" data-aos="fade-up">
       <mat-card
         *ngFor="let item of cartitems"
         class="p-4 shadow-lg rounded-lg hover:shadow-2xl transition-shadow"
@@ -113,7 +113,7 @@
     </div>
 
     <!-- Right side: Cart Summary -->
-    <div
+    <div data-aos="fade-up"
       class="w-full md:w-96 mt-8 md:mt-0 p-6 border border-gray-300 rounded-lg shadow-lg flex flex-col justify-between"
     >
       <div *ngFor="let item of cartitems" class="mb-4">
@@ -152,7 +152,7 @@
   </div>
 </div>
 } @else if(orderstep==1){
-<div class="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-2xl">
+<div class="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-2xl" data-aos="fade-up">
   <h2 class="text-2xl font-bold mb-6 text-center">Shipping Address</h2>
 
   <form class="space-y-4" [formGroup]="addressform" (ngSubmit)="onSubmit()">
@@ -220,7 +220,7 @@
   </form>
 </div>
 }@else if(orderstep==2){
-  <div class="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-2xl">
+  <div class="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-2xl" data-aos="fade-up">
   <h2 class="text-2xl font-bold mb-6 text-center">Select Payment Method</h2>
 
   <div class="flex flex-col gap-4">

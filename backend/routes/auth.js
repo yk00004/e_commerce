@@ -23,6 +23,8 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   let model = req.body;
+  console.log(model);
+  
   if (model.email && model.password) {
     let user = await User.findOne({ email: model.email });
     if (!user) {
